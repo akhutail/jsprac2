@@ -1,0 +1,47 @@
+<textarea id="answer"
+          rows="5" cols="33">
+</textarea>
+<script>
+
+function merge(firHalf,secHalf){
+	var merged = [];
+	var i=0,j=0,k=0;
+	while(i<firHalf.length && j<secHalf.length){
+		if(firHalf[i]<=secHalf[j]){
+			merged[k] = firHalf[i];
+			i++; k++;
+		}
+		else{
+			merged[k] = secHalf[j];
+			j++; k++;
+		}
+	}
+	while(i<firHalf.length){
+		merged[k] = firHalf[i];
+		k++; i++;
+	}
+	while(j<secHalf.length){
+		merged[k] = secHalf[j];
+		k++; j++;
+	}
+	return merged;
+}
+
+function mergeSort(inp){
+	if(inp.length<2){
+		return inp;
+	}
+	var mid = Math.floor((inp.length)/2);
+    //slice is O(n) so final complexity is O(nlogn*n)
+    //but not using slice was making it hard to read and code
+	var secHalf = inp.slice(mid,inp.length);
+	var firHalf = inp.slice(0,mid);
+	return merge(mergeSort(firHalf), mergeSort(secHalf));
+}
+var inp = [5,4,31,85,5,54,84,94,2];
+var ansField = document.getElementById("answer");
+ansField.textContent = mergeSort(inp);
+
+</script>
+
+ 
