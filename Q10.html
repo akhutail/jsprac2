@@ -1,0 +1,29 @@
+<script>
+function funCal(){
+    var n = (document.getElementById("inp1").value);
+    var ans = document.getElementById("answer");
+    var ansStr = "";
+    for(var i=0;i<n.length;i++){
+    	
+        ansStr = ansStr + n[i]*n[i];
+        
+    }
+    
+	ans.textContent = ansStr;
+}
+    
+    
+
+</script>
+
+  <label for="inp1">Enter number:</label><br><br>
+  <input type="text" id="inp1"><br><br>
+   
+
+
+
+<input type=button onClick="funCal();" value="Show"><br>
+<br>
+<textarea id="answer"
+          rows="5" cols="33">
+</textarea>

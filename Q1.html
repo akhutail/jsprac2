@@ -1,0 +1,35 @@
+<script>
+document.write("Distance to current date <br><br>");
+function funCal(){
+	var d1 = document.getElementById("d1").value;
+    var d2 = document.getElementById("d2").value;
+    var d3 = document.getElementById("answer");
+    
+    var today = new Date();
+    var dat1 = new Date(d1[5]+d1[6]+"/"+d1[8]+d1[9]+"/"+d1[0]+d1[1]+d1[2]+d1[3]);
+    var dat2 = new Date(d2[5]+d2[6]+"/"+d2[8]+d2[9]+"/"+d2[0]+d2[1]+d2[2]+d2[3]);
+    var diff1 = (today.getTime()-dat1.getTime())/(24*60*60*1000);
+    var diff2 = (today.getTime()-dat2.getTime())/(24*60*60*1000);
+
+    d3.textContent = Math.abs(Math.floor(diff1)) + "  " + Math.abs(Math.floor(diff2));
+    
+}
+
+</script>
+
+  <label for="d1">Date 1:</label><br>
+  <input type="date" id="d1">
+  <br>
+  
+  <label for="d2">Date 2:</label><br>
+  <input type="date" id="d2" >
+
+ <br><br>
+
+
+
+<input type=button onClick="funCal();" value="Show distance from current date"><br>
+<br>
+<textarea id="answer"
+          rows="3" cols="33">
+</textarea>

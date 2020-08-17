@@ -1,0 +1,34 @@
+<script>
+function funCal(){
+	var str = document.getElementById("inp1").value;
+    var n = parseInt(document.getElementById("inp2").value);
+    var ans = document.getElementById("answer");
+    var ansStr = "";
+    for(var i=0;i<str.length;i++){
+    	
+        for(var j=0;j<n;j++){
+        	ansStr = ansStr + str[i];
+        }
+        
+    }
+    
+	ans.textContent = ansStr;
+}
+    
+    
+
+</script>
+
+  <label for="inp1">String:</label><br><br>
+  <input type="text" id="inp1"><br><br>
+   <label for="inp2">Number of times?:</label><br><br>
+  <input type="text" id="inp2">
+ <br><br>
+
+
+
+<input type=button onClick="funCal();" value="Show"><br>
+<br>
+<textarea id="answer"
+          rows="5" cols="33">
+</textarea>

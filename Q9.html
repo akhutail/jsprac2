@@ -1,0 +1,38 @@
+<script>
+
+function funCal(){
+    var str = (document.getElementById("inp1").value).toLowerCase();
+    var ans = document.getElementById("answer");
+    var ansStr = "";
+
+	var alfabt = "abcdefghijklmonpqrstuvwxyz";
+    var distances = "01210121012210123321012345";
+    var mapping = {};
+    
+    for(var i=0;i<alfabt.length;i++){
+    	mapping[alfabt[i]] = distances[i];
+    }
+    mapping[" "] = " ";
+    
+    for(var i=0;i<str.length;i++){
+    	ansStr = ansStr + mapping[str[i]];
+    }
+    
+	ans.textContent = ansStr;
+}
+    
+    
+
+</script>
+
+  <label for="inp1">Enter string :</label><br><br>
+  <input type="text" id="inp1"><br><br>
+   
+
+
+
+<input type=button onClick="funCal();" value="Show"><br>
+<br>
+<textarea id="answer"
+          rows="5" cols="33">
+</textarea>
