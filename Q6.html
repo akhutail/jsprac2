@@ -1,0 +1,24 @@
+<textarea id="answer"
+          rows="5" cols="33">
+</textarea>
+<script>
+var inp = [1, 2, "aasf", "1", "123", 123];
+var ansBox = document.getElementById("answer");
+
+var ans = []; var types = [];
+for(var i=0;i<inp.length;i++){
+	ans[typeof inp[i]] = [];
+    //types
+}
+
+for(var i=0;i<inp.length;i++){
+	ans[typeof inp[i]].push(inp[i]);
+}
+var str = "";
+for(var p in ans){
+	str = str + ans[p] + "\n";
+}
+ansBox.textContent = str;
+</script>
+
+
