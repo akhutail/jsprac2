@@ -1,0 +1,229 @@
+<body class="body">
+
+	<div class="tab">
+    	<button onClick="tabClickHandler('timePlace')">Time & Place</button>
+    	<button onClick="tabClickHandler('timer')">Timer</button>
+    	<button onClick="tabClickHandler('stopwatch')">Stopwatch</button>
+    </div>
+	<br><br>
+    <div id="timePlace" class="content">
+    		<br>Time : <output id = "time"></output><br><br>
+            Place : <output id ="place"></output> 
+    </div>
+    
+    <div id="timer" class="content"><br><br>
+    	<output id='remainingTime'>00:00</output><br><br>
+    	Minutes:<input id='timerMinutes' type='text'> Seconds:
+        <input id='timerSeconds' type='text'><br><br>
+    	<button id="startTimer" onClick="timer.start()">Start Timer</button>
+    </div>
+    
+    <div id="stopwatch" class="content"><br><br>
+    	<output id='watchTime'>00:00:00
+        </output><br><br>
+    	<button id='start' onClick="watchButtonsHandler('Start')">
+        	Start
+        </button>
+        <button id='reset' onClick="watchButtonsHandler('Reset')">
+        	Reset
+        </button>
+    </div>
+
+    
+</body>
+
+
+<script>
+	let tabButtons = document.getElementsByClassName('content');    
+    for(let i=0;i<tabButtons.length;i++){
+    	tabButtons[i].style.display = 'none';
+    }
+    
+    let start,reset,watchTime;
+    start = document.getElementById('start'); 
+    reset = document.getElementById('reset');
+    watchTime = document.getElementById('watchTime');
+    let swTime = 0;
+
+    document.getElementById('timePlace').style.display = 'block';
+    let timeField = document.getElementById('time');
+    setInterval('timeUpdater(timeField)',1000);
+
+	let placeText = document.getElementById('place');
+    placeText.value = 'waiting for permission';
+	if(!navigator.geolocation) {
+		placeText.value = 'This is unexpected';
+	} 
+	else {
+		placeText.value = 'Locating…';
+		navigator.geolocation.getCurrentPosition(success, error);
+	}
+    
+    
+	//location retrieval and update
+    function success(position) {
+		let latitude  = position.coords.latitude;
+		let longitude = position.coords.longitude;
+		placeText.value = 'latitude: ' + latitude + ", longitude: " + longitude;
+	}
+
+	function error() {
+		placeText.value = 'unexpected error';
+	}
+
+	
+	//
+    
+	
+	
+	function tabClickHandler(str){
+		let contentDiv = document.getElementById(str);
+		for(let i=0;i<tabButtons.length;i++){
+			tabButtons[i].style.display = 'none';
+		}
+		contentDiv.style.display = 'block';
+	}
+    
+
+    //time updater
+    function timeUpdater(timeField){
+    	let date = new Date();
+        let str = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
+        timeField.value = str;
+    }
+    
+    
+    
+    //stopwatch functionality
+    let counter = {interval : undefined};
+    counter['resumeCounting'] = function(){
+    	this.interval = setInterval('counter.updateCount()', 10);
+    }
+    
+    counter['pauseCounting'] = function(){
+    		clearInterval(this.interval);
+    	};
+        
+    counter['updateCount'] = function(){
+    	swTime = swTime + 1;
+        let timeElapsed = swTime/100;
+        let centiSecs = Math.floor((swTime)%100);
+        let seconds = Math.floor(timeElapsed%60);
+        let minutes = Math.floor(timeElapsed/60);
+    	watchTime.textContent = minutes+':'+seconds+':'+centiSecs;
+    };
+    
+    function watchButtonsHandler(button){
+    	if(button==='Start' || button==='Continue'){
+        	if(start.innerText ==='Start' || start.innerText === 'Continue'){
+            	start.innerText = 'Pause';
+                counter.resumeCounting();
+            }
+            else{//button==='pause'
+            	start.innerText = 'Continue';
+            	counter.pauseCounting(); 
+            }
+        }
+        //reset clicked
+        else{
+        	counter['pauseCounting']();
+            start.innerText = 'Start';
+            swTime = 0;
+            watchTime.textContent = '00:00:00';
+        }
+    }
+
+
+    //
+    //timer functionality
+	let timer = {time : 0};
+    timer.minutes = document.getElementById('timerMinutes');
+    timer.seconds = document.getElementById('timerSeconds');
+    timer.remaining = document.getElementById('remainingTime');
+	timer.reset = document.getElementById('startTimer');
+    timer.minutes.value = 0;
+    timer.seconds.value = 0;
+    //this.alarm = new Audio();
+    //this.alarm.src = './audio.mp3';
+    //alert(this.minutes);
+    
+    function runTimer(){
+    	timer.time = timer.time - 1;
+        let secs = (timer.time)%60;
+        let mins = Math.floor(timer.time/60);
+        timer.remaining.value = mins + ":" + secs;
+        if(timer.time<=0){
+        //play sound
+            timer.audio = new Audio('http://soundbible.com/grab.php?id=1633&type=mp3');
+  			timer.audio.play();
+        	clearInterval(timer.interval);
+            timer.reset.innerText = 'Start Timer';
+        }
+        
+    };
+    
+    
+    timer['start'] = function(){
+    	//alert(this.time);
+    	if(this.alarm!==undefined){
+    		this.alarm.pause();
+        	this.alarm.currentTime = 0;
+        }
+    	if(this.time===0){
+        	//alert(this.seconds.value);
+        	this.time = parseInt(this.minutes.value,10)*60 + 
+            parseInt(this.seconds.value,10);
+            if(this.time===0){
+            	return;
+            }
+        	this.interval = setInterval("runTimer()",1000);
+            //alert(this.interval);
+            this.reset.innerText = 'Reset';
+        }
+        else{
+        	clearInterval(this.interval);
+        	this.remaining.value = '00:00';
+            this.reset.innerText = 'Start Timer';
+            this.time = 0;
+            this.alarm.pause();
+            this.alarm.currentTime = 0;
+        }
+    };
+    
+
+</script>
+
+
+
+<style>
+	input{
+    	width : 40;
+        font-size = 20;
+    }
+	button{
+    	font-size : 20;
+    	background-color : #F0DF87;
+        border : none;
+    	text-align : center;
+    }
+    button:focus{
+    	background-color : #F99999;
+    }
+	.tab{
+    	background-color : #F0DF87;
+    }
+    .tab button{
+    	font-size : 18;
+        background-color : inherit;
+        padding :  10 10;
+    }
+    
+    .content{
+    	font-size : 20;
+    	text-align : center;
+      	margin: auto;
+  		width: 40%;
+    }
+    
+    
+</style>
